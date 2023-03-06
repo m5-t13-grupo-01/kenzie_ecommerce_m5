@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from .models import User
+from addresses.models import Address
+import ipdb
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -49,6 +51,8 @@ class UserSerializer(serializers.ModelSerializer):
         )
         if not address_obj:
             address_obj = Address.objects.create(**address)
+
+        ipdb.set_trace()
 
         if validated_data["is_admin"]:
             return User.objects.create_superuser(**validated_data, address=address_obj)
