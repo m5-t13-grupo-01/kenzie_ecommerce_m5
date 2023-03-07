@@ -1,4 +1,4 @@
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from .models import Product
 from .serializers import ProductSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -29,3 +29,13 @@ class ProductView(ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(seller=self.request.user)
+
+
+class ProductDetailView(RetrieveUpdateDestroyAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsSellerOrAdmin]
+
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    lookup_url_kwarg = "product_id"
