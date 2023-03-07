@@ -16,7 +16,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "carts",
             "is_available",
         ]
-        read_only_fields = ["id", "carts"]
+        read_only_fields = ["id", "seller", "carts"]
         extra_kwargs = {
             "is_available": {
                 "write_only": True,
