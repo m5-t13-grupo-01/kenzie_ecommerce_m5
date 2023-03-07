@@ -5,8 +5,6 @@ from .models import User
 from .serializers import UserSerializer
 from .permissions import IsAdminJustForGetList, IsOwnerOrAdmin
 from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import get_object_or_404
-import ipdb
 
 
 class UserView(ListCreateAPIView):
