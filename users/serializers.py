@@ -36,6 +36,7 @@ class UserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "is_superuser",
+            "is_seller",
             "address",
             "is_admin",
             "cart",
