@@ -11,6 +11,6 @@ def send_email(destiny, title, message):
     msg["From"] = str(EMAIL_ADDRESS)
     msg["To"] = str(destiny)
     msg.set_content(message)
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+    with smtplib.SMTP_SSL(os.getenv('EMAIL_HOST'), os.getenv('EMAIL_PORT')) as smtp:
         smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
         smtp.send_message(msg)
