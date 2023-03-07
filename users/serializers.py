@@ -2,9 +2,12 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from .models import User
 from addresses.models import Address
+from addresses.serializers import AddressSerializers
+from carts.models import Cart
 
 
 class UserSerializer(serializers.ModelSerializer):
+    address = AddressSerializers()
     username = serializers.CharField(
         validators=[
             UniqueValidator(
@@ -33,28 +36,30 @@ class UserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "is_superuser",
+            "is_seller",
             "address",
             "is_admin",
+            "cart",
         ]
-        read_only_fields = [
-            "id",
-            "is_superuser",
-        ]
+        read_only_fields = ["id", "is_superuser", "cart"]
         extra_kwargs = {"password": {"write_only": True}}
+        depth = 1
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict):
         address = validated_data.pop("address")
 
-        address_obj = Address.objects.filter(
-            street=address["street"], number=address["number"]
-        )
-        if not address_obj:
-            address_obj = Address.objects.create(**address)
+        address_obj = Address.objects.create(**address)
+
+        new_cart = Cart.objects.create()
 
         if validated_data["is_admin"]:
-            return User.objects.create_superuser(**validated_data, address=address_obj)
+            return User.objects.create_superuser(
+                **validated_data, address=address_obj, cart=new_cart
+            )
         else:
-            return User.objects.create_user(**validated_data, address=address_obj)
+            return User.objects.create_user(
+                **validated_data, address=address_obj, cart=new_cart
+            )
 
     def update(self, instance: User, validated_data: dict):
         for key, value in validated_data.items():

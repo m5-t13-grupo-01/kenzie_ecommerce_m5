@@ -1,9 +1,12 @@
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from .models import User
 from .serializers import UserSerializer
-from .permissions import IsAdminJustForGetList
+from .permissions import IsAdminJustForGetList, IsOwnerOrAdmin
+from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+import ipdb
 
 
 class UserView(ListCreateAPIView):
@@ -12,3 +15,12 @@ class UserView(ListCreateAPIView):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class UserDetailView(RetrieveUpdateDestroyAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
+
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_url_kwarg = "user_id"
