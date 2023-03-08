@@ -1,9 +1,16 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from .models import Product
-from .serializers import ProductSerializer
+from rest_framework.generics import (
+    ListCreateAPIView,
+    RetrieveUpdateDestroyAPIView,
+    CreateAPIView,
+)
+from .models import Product, CartProducts
+from .serializers import ProductSerializer, AddProductCartSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .permissions import IsSellerOrAdmin
+from users.permissions import IsOwnerOrAdmin
+from django.shortcuts import get_object_or_404
+from carts.models import Cart
 
 
 class ProductView(ListCreateAPIView):
@@ -39,3 +46,16 @@ class ProductDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
 
     lookup_url_kwarg = "product_id"
+
+
+class AddProductToCart(CreateAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
+
+    queryset = CartProducts.objects.all()
+    serializer_class = AddProductCartSerializer
+
+    def perform_create(self, serializer):
+        product_selected = get_object_or_404(Product, id=self.kwargs["product_id"])
+        cart_selected = get_object_or_404(Cart, id=self.request.user.cart.id)
+        return serializer.save(product=product_selected, cart=cart_selected)

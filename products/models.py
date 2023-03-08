@@ -19,5 +19,18 @@ class Product(models.Model):
 
     carts = models.ManyToManyField(
         "carts.Cart",
+        through="CartProducts",
         related_name="products",
+    )
+
+
+class CartProducts(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+
+    cart = models.ForeignKey(
+        "carts.Cart", on_delete=models.CASCADE, related_name="cart_products"
+    )
+
+    product = models.ForeignKey(
+        "products.Product", on_delete=models.CASCADE, related_name="cart_products"
     )

@@ -1,6 +1,10 @@
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import (
+    ListCreateAPIView,
+    RetrieveUpdateDestroyAPIView,
+    CreateAPIView,
+)
 from .models import User
 from .serializers import UserSerializer
 from .permissions import IsAdminJustForGetList, IsOwnerOrAdmin

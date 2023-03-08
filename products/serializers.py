@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product
+from .models import Product, CartProducts
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -22,3 +22,11 @@ class ProductSerializer(serializers.ModelSerializer):
                 "write_only": True,
             }
         }
+
+
+class AddProductCartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CartProducts
+        fields = ["id", "cart", "product"]
+        read_only_fields = ["id", "cart", "product"]
+        depth = 1
