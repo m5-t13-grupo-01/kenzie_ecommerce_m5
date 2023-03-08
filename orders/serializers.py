@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import Order
-from .utils import isAvailableProduct, NotAvailableException
 from products.models import Product, CartProducts
 
 
@@ -46,11 +45,6 @@ class OrderReturnSerializer(serializers.ModelSerializer):
 
         for product in my_products:
             pro = Product.objects.filter(pk=product.product_id).first()
-
-            try:
-                isAvailableProduct(pro)
-            except NotAvailableException as err:
-                return {"detail": err.message}
 
             if pro.seller not in products_for_seller:
                 products_for_seller[pro.seller] = [pro]
