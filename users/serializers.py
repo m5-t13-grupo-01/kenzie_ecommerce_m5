@@ -4,6 +4,7 @@ from .models import User
 from addresses.models import Address
 from addresses.serializers import AddressSerializers
 from carts.models import Cart
+import ipdb
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -37,8 +38,8 @@ class UserSerializer(serializers.ModelSerializer):
             "last_name",
             "is_superuser",
             "is_seller",
-            "address",
             "is_admin",
+            "address",
             "cart",
         ]
         read_only_fields = ["id", "is_superuser", "cart"]
@@ -62,10 +63,18 @@ class UserSerializer(serializers.ModelSerializer):
             )
 
     def update(self, instance: User, validated_data: dict):
+        if validated_data.get("address"):
+            address = validated_data.pop("address")
+            address_obj = Address.objects.filter(pk=instance.address.id).first()
+
+            for key, value in address.items():
+                setattr(address_obj, key, value)
+            address_obj.save()
+
         for key, value in validated_data.items():
             setattr(instance, key, value)
 
         instance.set_password(validated_data.get("password"))
         instance.save()
 
-        return instance
+        return User.objects.filter(pk=instance.id).first()
