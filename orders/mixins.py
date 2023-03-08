@@ -13,6 +13,6 @@ class ProductIsAvailableMixin:
             try:
                 isAvailableProduct(pro)
             except NotAvailableException as err:
-                return Response({"detail": err.message}, status=400)
+                return Response({"detail": f"{err.message} - {pro.name}"}, status=400)
 
         return self.create(request, *args, **kwargs)
