@@ -1,11 +1,12 @@
 from rest_framework.generics import CreateAPIView
 from .models import Order
 from .serializers import OrderReturnSerializer
+from .mixins import ProductIsAvailableMixin
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 
-class CreateOrderView(CreateAPIView):
+class CreateOrderView(ProductIsAvailableMixin, CreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
