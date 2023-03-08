@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Order
+from .utils import isAvailableProduct, NotAvailableException
 from products.models import Product, CartProducts
 
 
@@ -35,7 +36,7 @@ class OrderSerializer(serializers.ModelSerializer):
         read_only = ["id", "created_at", "updated_at"]
 
 
-class OrderReturnSerializer(serializers.Serializer):
+class OrderReturnSerializer(serializers.ModelSerializer):
     orders = OrderSerializer(many=True, read_only=True)
 
     def create(self, validated_data):
@@ -45,6 +46,11 @@ class OrderReturnSerializer(serializers.Serializer):
 
         for product in my_products:
             pro = Product.objects.filter(pk=product.product_id).first()
+
+            try:
+                isAvailableProduct(pro)
+            except NotAvailableException as err:
+                return {"detail": err.message}
 
             if pro.seller not in products_for_seller:
                 products_for_seller[pro.seller] = [pro]
@@ -65,3 +71,7 @@ class OrderReturnSerializer(serializers.Serializer):
             orders.append(order)
 
         return {"orders": orders}
+
+    class Meta:
+        model = Order
+        fields = ["orders"]
