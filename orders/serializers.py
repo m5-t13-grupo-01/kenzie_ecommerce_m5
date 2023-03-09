@@ -10,17 +10,20 @@ class OrderSerializer(serializers.ModelSerializer):
     def get_products(self, instance: Order):
         products_ids = instance.products.split(",")
         products = []
+        # import ipdb
 
-        for product_id in products_ids:
-            product = Product.objects.filter(pk=product_id).first()
-            products.append(
-                {
-                    "name": product.name,
-                    "description": product.description,
-                    "price": product.price,
-                    "category": product.category,
-                }
-            )
+        # ipdb.set_trace()
+        if products_ids:
+            for product_id in products_ids:
+                product = Product.objects.filter(pk=product_id).first()
+                products.append(
+                    {
+                        "name": product.name,
+                        "description": product.description,
+                        "price": product.price,
+                        "category": product.category,
+                    }
+                )
 
         return products
 
@@ -70,7 +73,9 @@ class OrderReturnSerializer(serializers.ModelSerializer):
 
             products = ",".join(products)
 
-            order = Order.objects.create(products=products, user=validated_data["user"])
+            order = Order.objects.create(
+                products=products, user=validated_data["user"], seller_id=obj.seller.id
+            )
             orders.append(order)
 
         return {"orders": orders}
