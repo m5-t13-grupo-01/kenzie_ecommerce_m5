@@ -38,6 +38,12 @@ class GetOrdersView(ListAPIView):
     serializer_class = OrderSerializer
 
     def get_queryset(self):
+        if self.request.user.is_seller and self.request.query_params.get("status"):
+            return Order.objects.filter(
+                seller_id=self.request.user.id,
+                status=self.request.query_params["status"],
+            )
+
         if self.request.user.is_seller:
             return Order.objects.filter(seller_id=self.request.user.id)
 
