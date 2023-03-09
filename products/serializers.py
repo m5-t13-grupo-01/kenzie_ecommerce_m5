@@ -14,14 +14,20 @@ class ProductSerializer(serializers.ModelSerializer):
             "stock",
             "seller",
             "carts",
-            "is_available",
         ]
-        read_only_fields = ["id", "seller", "carts"]
-        extra_kwargs = {
-            "is_available": {
-                "write_only": True,
-            }
-        }
+
+    def update(self, instance: Product, validated_data: dict):
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+
+        instance.save()
+        if instance.stock <= 0:
+            instance.is_available = False
+        else:
+            instance.is_available = True
+
+        instance.save()
+        return Product.objects.filter(pk=instance.id).first()
 
 
 class AddProductCartSerializer(serializers.ModelSerializer):
