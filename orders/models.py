@@ -18,6 +18,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     products = models.TextField()
+    seller_id = models.UUIDField()
 
     user = models.ForeignKey(
         "users.User",

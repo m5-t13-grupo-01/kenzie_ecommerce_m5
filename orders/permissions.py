@@ -8,6 +8,15 @@ class IsSellerOrAdmin(permissions.BasePermission):
         return (
             request.user.is_authenticated
             and obj.user == request.user
-            and request.user.is_seller 
+            and request.user.is_seller
             or request.user.is_admin
+        )
+
+
+class IsAdminOrSeller(permissions.BasePermission):
+    def has_permission(self, request: Request, view: View):
+        return (
+            request.user.is_authenticated
+            and request.user.is_admin
+            or request.user.is_seller
         )

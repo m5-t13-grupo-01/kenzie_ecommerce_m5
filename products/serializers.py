@@ -15,6 +15,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "seller",
             "carts",
         ]
+        read_only_fields = ["seller"]
 
     def update(self, instance: Product, validated_data: dict):
         for key, value in validated_data.items():
