@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Order
 from products.models import Product, CartProducts
+from users.mailer import send_email
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -77,3 +78,28 @@ class OrderReturnSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ["orders"]
+
+
+class OrderUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = [
+            "id",
+            "status",
+            "created_at",
+            "updated_at",
+        ]
+        read_only = ["id", "created_at", "updated_at"]
+
+    def update(self, instance: Order, validated_data):
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+
+        instance.save()
+
+        send_email(
+            destiny=instance.user.email,
+            message=f"O status do seu pedido foi atualizado para {instance.status}",
+            title=f"Atualização do Pedido - {instance.id}",
+        )
+        return instance
