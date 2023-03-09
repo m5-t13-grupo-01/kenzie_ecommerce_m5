@@ -1,9 +1,10 @@
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, UpdateAPIView
 from .models import Order
-from .serializers import OrderReturnSerializer
+from .serializers import OrderReturnSerializer, OrderUpdateSerializer
 from .mixins import ProductIsAvailableMixin
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
+from .permissions import IsSellerOrAdmin
 
 
 class CreateOrderView(ProductIsAvailableMixin, CreateAPIView):
@@ -15,3 +16,13 @@ class CreateOrderView(ProductIsAvailableMixin, CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class UpdateOrderView(UpdateAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated, IsSellerOrAdmin]
+
+    queryset = Order.objects.all()
+    serializer_class = OrderUpdateSerializer
+
+    lookup_url_kwarg = "order_id"
