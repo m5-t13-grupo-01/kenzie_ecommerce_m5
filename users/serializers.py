@@ -72,9 +72,11 @@ class UserSerializer(serializers.ModelSerializer):
             address_obj.save()
 
         for key, value in validated_data.items():
-            setattr(instance, key, value)
+            if key == "password":
+                instance.set_password(validated_data.get("password"))
+            else:
+                setattr(instance, key, value)
 
-        instance.set_password(validated_data.get("password"))
         instance.save()
 
         return User.objects.filter(pk=instance.id).first()
