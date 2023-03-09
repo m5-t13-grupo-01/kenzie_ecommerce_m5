@@ -10,9 +10,7 @@ class OrderSerializer(serializers.ModelSerializer):
     def get_products(self, instance: Order):
         products_ids = instance.products.split(",")
         products = []
-        # import ipdb
 
-        # ipdb.set_trace()
         if products_ids:
             for product_id in products_ids:
                 product = Product.objects.filter(pk=product_id).first()
