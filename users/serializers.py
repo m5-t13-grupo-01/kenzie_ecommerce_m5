@@ -39,12 +39,11 @@ class UserSerializer(serializers.ModelSerializer):
             "is_superuser",
             "is_seller",
             "is_admin",
-            "address",
             "cart",
+            "address",
         ]
         read_only_fields = ["id", "is_superuser", "cart"]
         extra_kwargs = {"password": {"write_only": True}}
-        depth = 1
 
     def create(self, validated_data: dict):
         address = validated_data.pop("address")
