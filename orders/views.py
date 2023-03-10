@@ -50,3 +50,13 @@ class GetOrdersView(ListAPIView):
             return Order.objects.filter(seller_id=self.request.user.id)
 
         return Order.objects.all()
+
+
+class GetUserOrdersView(ListAPIView):
+    authentication_classes = [JWTAuthentication]
+    serializer_class = [IsAuthenticated]
+
+    serializer_class = OrderSerializer
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
