@@ -2,6 +2,7 @@ from rest_framework.generics import (
     ListCreateAPIView,
     RetrieveUpdateDestroyAPIView,
     CreateAPIView,
+    DestroyAPIView,
 )
 from .models import Product, CartProducts
 from .serializers import ProductSerializer, AddProductCartSerializer
@@ -9,7 +10,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .permissions import IsSellerOrAdmin
 from users.permissions import IsOwnerOrAdmin
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_list_or_404, get_object_or_404
 from carts.models import Cart
 
 
@@ -59,3 +60,19 @@ class AddProductToCart(CreateAPIView):
         product_selected = get_object_or_404(Product, id=self.kwargs["product_id"])
         cart_selected = get_object_or_404(Cart, id=self.request.user.cart.id)
         return serializer.save(product=product_selected, cart=cart_selected)
+
+
+class RemoveProductCartView(DestroyAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    lookup_url_kwarg = "product_id"
+
+    def perform_destroy(self, instance):
+        queryset = get_list_or_404(
+            CartProducts, product=instance.id, cart=self.request.user.cart.id
+        )[0]
+        return super().perform_destroy(queryset)

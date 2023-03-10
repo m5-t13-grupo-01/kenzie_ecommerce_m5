@@ -1,12 +1,14 @@
-from rest_framework.generics import CreateAPIView, UpdateAPIView, ListAPIView
+from rest_framework.generics import (
+    CreateAPIView,
+    UpdateAPIView,
+    ListAPIView,
+)
 from .models import Order
 from .serializers import OrderReturnSerializer, OrderUpdateSerializer, OrderSerializer
 from .mixins import ProductIsAvailableMixin
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsSellerOrAdmin, IsAdminOrSeller
-from products.models import Product
-from users.models import User
 
 
 class CreateOrderView(ProductIsAvailableMixin, CreateAPIView):
