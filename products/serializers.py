@@ -32,8 +32,9 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class AddProductCartSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(read_only=True)
+
     class Meta:
         model = CartProducts
         fields = ["id", "cart", "product"]
         read_only_fields = ["id", "cart", "product"]
-        depth = 1

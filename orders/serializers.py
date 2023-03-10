@@ -7,7 +7,7 @@ from users.mailer import send_email
 class OrderSerializer(serializers.ModelSerializer):
     products = serializers.SerializerMethodField()
 
-    def get_products(self, instance: Order):
+    def get_products(self, instance: Order) -> list:
         products_ids = instance.products.split(",")
         products = []
 

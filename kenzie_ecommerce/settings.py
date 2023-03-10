@@ -32,9 +32,18 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-MY_APPS = ["addresses", "carts", "orders", "users", "products"]
+MY_APPS = [
+    "addresses",
+    "carts",
+    "orders",
+    "users",
+    "products",
+]
 
-THIRD_PARTY_APPS = ["rest_framework"]
+THIRD_PARTY_APPS = [
+    "rest_framework",
+    "drf_spectacular",
+]
 
 
 DJANGO_APPS = [
@@ -151,6 +160,13 @@ SIMPLE_JWT = {
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 2,
+    "PAGE_SIZE": 5,
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Kenzie E-Commerce API",
+    "DESCRIPTION": "Api desenvolvida para uma aplicação de e-commerce.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }

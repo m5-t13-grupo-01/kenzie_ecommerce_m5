@@ -6,7 +6,7 @@ from products.models import CartProducts, Product
 class CartSerializer(serializers.ModelSerializer):
     products = serializers.SerializerMethodField()
 
-    def get_products(self, instance: Cart):
+    def get_products(self, instance: Cart) -> list:
         products_obj = CartProducts.objects.filter(cart=instance)
         products_ids = [str(product.product_id) for product in products_obj]
         products = []
