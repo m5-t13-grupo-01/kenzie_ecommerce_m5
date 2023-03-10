@@ -56,8 +56,7 @@ Todas as funcionalidades numeradas abaixo devem ser desenvolvidas para o MVP do 
 # Instruções:
 
 ### Crie o ambiente virtual
-
-    python -m venv venv
+python -m venv venv
 
 ### Ative o venv:
 
@@ -77,5 +76,32 @@ pip install -r requirements.txt
 ### Execute as migrações
 
 python manage.py migrate
+
+### Rotas de endpoint:
+
+## Usuários:
+/api/users/ -> Cadastro de usuários (admin, cliente, vendedor)
+/api/users/ -> Listagem de todos usuários (somente admin)
+/api/users/<str:user_id>/ -> Lista, Atualiza e Deleta por id de usuário (somente admin ou usuário dono da conta)
+
+## Login:
+/api/users/login/ -> Gera seu Token de autenticação.
+
+## Produtos:
+/api/products/ -> Cria um produto (somente vendedor ou admin), Lista todos os produtos (rota livre para todos usuários)
+/api/products/<str:product_id>/ -> Lista, Atualiza e Deleta por id de produto (somente admin ou vendedor dono do produto)
+/api/products/<str:product_id>/cart/ -> Adiciona um produto ao seu carrinho
+
+## Carrinho:
+/api/users/cart/products/ -> Lista meu carrinho de compras
+/api/cart/product/remove/<str:product_id>/ -> Remove um produto do meu carrinho de compras
+
+## Pedidos:
+/api/orders/ -> Cria meus pedidos
+/api/orders/user/ -> Lista meus pedidos comprados
+/api/orders/report/ -> Lista os pedidos vendidos por vendedor se usuário for um vendedor e apenas de seus produtos, ou caso admin lista todos os pedidos de vendas de todos os vendedores.
+/api/orders/<str:order_id>/ - Atualiza o status de uma ordem de pedido (somente vendedor dono, e admin)
+
+
 
 
