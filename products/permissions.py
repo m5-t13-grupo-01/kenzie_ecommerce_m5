@@ -5,7 +5,7 @@ from .models import Product
 
 class IsSellerOrAdmin(BasePermission):
     def has_object_permission(self, request: Request, view: View, obj: Product):
-        if request.method == "DELETE":
+        if request.method == "DELETE" or request.method == "PATCH":
             return request.user.id == obj.seller.id or request.user.is_admin
         else:
             return (
