@@ -14,6 +14,9 @@ class IsAdminJustForGetList(permissions.BasePermission):
 
 class IsOwnerOrAdmin(permissions.BasePermission):
     def has_object_permission(self, request: Request, view: View, obj: User):
+        import ipdb
+
+        ipdb.set_trace()
         return (
             request.user.is_authenticated
             and obj == request.user

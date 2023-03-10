@@ -61,6 +61,8 @@ class OrderReturnSerializer(serializers.ModelSerializer):
             else:
                 products_for_seller[pro.seller].append(pro)
 
+            product.delete()
+
         orders = []
 
         for value in products_for_seller.values():

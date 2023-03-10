@@ -1,4 +1,8 @@
-from rest_framework.generics import CreateAPIView, UpdateAPIView, ListAPIView
+from rest_framework.generics import (
+    CreateAPIView,
+    UpdateAPIView,
+    ListAPIView,
+)
 from .models import Order
 from .serializers import OrderReturnSerializer, OrderUpdateSerializer, OrderSerializer
 from .mixins import ProductIsAvailableMixin
