@@ -27,7 +27,6 @@ Todas as funcionalidades numeradas abaixo devem ser desenvolvidas para o MVP do 
   
 5. Usuários
     O sistema deve permitir o cadastro de usuários. Deve haver, no mínimo, 3 tipos de usuários:
-
     Administrador
     Vendedor
     Cliente
@@ -36,12 +35,14 @@ Todas as funcionalidades numeradas abaixo devem ser desenvolvidas para o MVP do 
 6. Funcionalidades do administrador:
     O administrador pode transformar um usuário comum em vendedor.
     O usuário administrador deve ter acesso a todas as rotas.
+    
 7. Funcionalidades permitidas para os vendedores:
     Cadastrar novos produtos na plataforma.
     Atualizar o estoque do produto.
     Verificar pedidos realizados.
     Deve ter uma rota para visualizar todos os pedidos vendidos.
     Deve ter todos os acessos de um cliente. (O vendedor também pode ser cliente).
+    
 8. Funcionalidades permitidas para os clientes:
     Pode atualizar o perfil para se tornar vendedor.
     Adicionar produtos ao carrinho.
