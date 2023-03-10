@@ -8,7 +8,7 @@ from .serializers import OrderReturnSerializer, OrderUpdateSerializer, OrderSeri
 from .mixins import ProductIsAvailableMixin
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
-from .permissions import IsSellerOrAdmin, IsAdminOrSeller
+from .permissions import IsSellerOwnerOrAdmin, IsAdminOrSeller
 
 
 class CreateOrderView(ProductIsAvailableMixin, CreateAPIView):
@@ -24,7 +24,7 @@ class CreateOrderView(ProductIsAvailableMixin, CreateAPIView):
 
 class UpdateOrderView(UpdateAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, IsSellerOrAdmin]
+    permission_classes = [IsAuthenticated, IsSellerOwnerOrAdmin]
 
     queryset = Order.objects.all()
     serializer_class = OrderUpdateSerializer
