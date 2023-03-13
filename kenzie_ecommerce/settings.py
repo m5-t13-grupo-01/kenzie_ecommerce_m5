@@ -114,7 +114,7 @@ if DATABASE_URL:
         default=DATABASE_URL, conn_max_age=500, ssl_require=True
     )
     DATABASES["default"].update(db_from_env)
-    DEBUG = False
+    # DEBUG = False
 
 if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
